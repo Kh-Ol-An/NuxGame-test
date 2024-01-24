@@ -1,11 +1,133 @@
 <script setup lang="ts">
+import { computed, ref } from 'vue'
+import useVuelidate from '@vuelidate/core';
+import { helpers } from '@vuelidate/validators';
+import { useStore } from '../store';
+import Input from '../components/Input.vue'
+
+const { dispatch } = useStore();
+
+const username = ref('')
+const phone = ref('')
+
+const validateUsername = (value) => {
+    const regex = /^[a-zA-Z]+$/;
+    return regex.test(value);
+}
+
+const validatePhone = (value) => {
+    const regex = /^[0-9-+!@#$%^&*(),.?":{}|<>]+$/;
+    return regex.test(value);
+}
+
+const rules = computed(() => ({
+    username: {
+        onlyLatinLetters: helpers.withMessage('Only Latin letters are allowed', validateUsername)
+    },
+    phone: {
+        onlySymbolsAndNumbers: helpers.withMessage('Only symbols and numbers are allowed', validatePhone)
+    }
+}))
+
+const v = useVuelidate(rules, { username, phone })
+
+const disabledLogin = computed(
+    () => username.value.length === 0 || phone.value.length === 0 || v.value.$error
+)
+
+const handleLogin = () => {
+    v.value.$touch()
+    if (v.value.$error) return
+    dispatch('login', { username: username.value, phone: phone.value })
+}
 </script>
 
 <template>
-    <div>
-        Auth page
+    <div class="root">
+        <div class="container">
+            <h1 class="title">Log In</h1>
+
+            <form class="body" @submit.prevent="handleLogin">
+                <span class="label">Please log in</span>
+                <Input
+                    classes="username"
+                    id="username"
+                    v-model:value="v.username.$model"
+                    type="text"
+                    placeholder="Username"
+                    :errors="v.username.$errors"
+                />
+                <Input
+                    classes="phone"
+                    id="phone"
+                    v-model:value="v.phone.$model"
+                    type="number"
+                    placeholder="Phone Number"
+                    :errors="v.phone.$errors"
+                />
+                <button
+                    :class="['login', disabledLogin && 'disabled-login']"
+                    type="submit"
+                    :disabled="disabledLogin"
+                >
+                    Log In
+                </button>
+            </form>
+        </div>
     </div>
 </template>
 
 <style scoped lang="sass">
+@import '../styles/setup/variables.sass'
+@import '../styles/setup/mixins.sass'
+
+.root
+    width: 100%
+    height: 100vh
+    display: flex
+    align-items: center
+    justify-content: center
+
+.container
+    width: 448px
+    border-radius: $primary-radius
+    background-color: $accept-color
+    overflow: hidden
+
+.title
+    padding: 14px
+    color: $special-color
+    font-size: $primary-font-size
+    font-style: normal
+    font-weight: $normal-weight
+    line-height: $primary-line-height
+    letter-spacing: $primary-letter-spacing
+    background-color: $secondary-color
+    text-align: center
+
+.body
+    padding: 14px 24px 30px
+    display: flex
+    flex-direction: column
+
+.label
+    color: $special-color
+    font-size: $secondary-font-size
+    font-style: normal
+    font-weight: $normal-weight
+    line-height: $primary-line-height
+    letter-spacing: $secondary-letter-spacing
+
+.username
+    margin-top: 14px
+
+.phone
+    margin-top: 4px
+
+.login
+    @include action
+    margin-top: 9px
+
+.disabled-login
+    opacity: 0.5
 </style>

@@ -17,12 +17,21 @@ export default {
         },
     },
     actions: {
-        async login({ commit }, { email, password }) {
+        async login({ commit }, { username, phone }) {
             try {
                 const response = await AuthService.login()
-                localStorage.setItem('token', response.data)
-                commit('setUser', response.data)
-                await router.push('/')
+                const user = response.data.find((user: User) => user.username === username && user.phone === phone)
+                if (user) {
+                    commit('setUser', user)
+                    localStorage.setItem('token', user)
+                    await router.push('/')
+                } else {
+                    notify({
+                        type: 'error',
+                        title: 'LogIn',
+                        text: 'User not found',
+                    })
+                }
             } catch (err) {
                 notify({
                     type: 'error',
@@ -31,6 +40,11 @@ export default {
                 })
             }
         },
+        logout({ commit }) {
+            commit('setUser', null)
+            localStorage.removeItem('token')
+            router.push('/auth')
+        }
     },
     getters: {
         getUser(state: AuthState) {
