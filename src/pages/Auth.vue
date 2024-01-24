@@ -1,46 +1,46 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { helpers } from '@vuelidate/validators';
 import { useStore } from '../store';
-import Input from '../components/Input.vue'
-import Card from '../components/Card.vue'
+import Input from '../components/Input.vue';
+import Card from '../components/Card.vue';
 
 const { dispatch } = useStore();
 
-const username = ref('')
-const phone = ref('')
+const username = ref('');
+const phone = ref('');
 
 const validateUsername = (value) => {
-    const regex = /^[a-zA-Z]+$/;
+    const regex = /^[a-zA-Z._]+$/; // The task included only letters. But the data array also contains the following characters: "." and "_"
     return regex.test(value);
-}
+};
 
 const validatePhone = (value) => {
     const regex = /^[0-9-+!@#$%^&*(),.?":{}|<>]+$/;
     return regex.test(value);
-}
+};
 
 const rules = computed(() => ({
     username: {
-        onlyLatinLetters: helpers.withMessage('Only Latin letters are allowed', validateUsername)
+        onlyLatinLetters: helpers.withMessage('Only Latin letters and dots are allowed', validateUsername)
     },
     phone: {
         onlySymbolsAndNumbers: helpers.withMessage('Only symbols and numbers are allowed', validatePhone)
     }
-}))
+}));
 
-const v = useVuelidate(rules, { username, phone })
+const v = useVuelidate(rules, { username, phone });
 
 const disabledLogin = computed(
     () => username.value.length === 0 || phone.value.length === 0 || v.value.$error
-)
+);
 
 const handleLogin = () => {
-    v.value.$touch()
-    if (v.value.$error) return
-    dispatch('login', { username: username.value, phone: phone.value })
-}
+    v.value.$touch();
+    if (v.value.$error) return;
+    dispatch('login', { username: username.value, phone: phone.value });
+};
 </script>
 
 <template>

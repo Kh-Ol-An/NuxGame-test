@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 const routes = [
     {
@@ -11,11 +11,11 @@ const routes = [
         name: 'Auth',
         component: () => import('../pages/Auth.vue'),
     },
-]
+];
 
 const router = createRouter({
     history: createWebHashHistory(),
     routes,
-})
+});
 
-export default router
+export default router;

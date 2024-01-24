@@ -24,10 +24,10 @@ const props = defineProps({
         type: Array,
         required: false,
     },
-})
+});
 
-const emit = defineEmits(['update:value'])
-const input = (event) => emit('update:value', event.target.value)
+const emit = defineEmits(['update:value']);
+const input = (event) => emit('update:value', event.target.value);
 </script>
 
 <template>

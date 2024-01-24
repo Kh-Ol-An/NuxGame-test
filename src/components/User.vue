@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useStore } from '../store';
-import Card from '../components/Card.vue'
+import Card from '../components/Card.vue';
 
 const { state, dispatch } = useStore();
 const user = state.auth.user;
