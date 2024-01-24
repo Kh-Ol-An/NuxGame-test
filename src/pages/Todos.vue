@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { useStore } from '../store';
 import Todo from '../components/Todo.vue'
-
-const { dispatch } = useStore();
+import User from '../components/User.vue'
 </script>
 
 <template>
-    <div>
-        <button class="logout" type="button" @click="dispatch('logout')">logout</button>
+    <div class="todos-root">
+        <User/>
+
         <Todo/>
     </div>
 </template>
@@ -16,6 +15,10 @@ const { dispatch } = useStore();
 @import '../styles/setup/variables.sass'
 @import '../styles/setup/mixins.sass'
 
-.logout
-    @include action
+.todos-root
+    padding: 20px
+    display: flex
+    align-items: center
+    flex-direction: column
+    gap: 20px
 </style>

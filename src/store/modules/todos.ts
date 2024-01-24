@@ -13,6 +13,7 @@ export default {
     },
     actions: {
         async downloadTodos({ commit }) {
+            commit('setLoading', true)
             try {
                 const response = await TodosService.getTodos()
                 commit('setTodos', response.data)
@@ -22,6 +23,8 @@ export default {
                     title: 'Download Todos',
                     text: err?.response?.data?.message || 'Something went wrong',
                 })
+            } finally {
+                commit('setLoading', false)
             }
         },
     },

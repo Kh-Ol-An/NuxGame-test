@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref, onErrorCaptured } from 'vue'
-import router from './router/index.ts'
+import { onMounted } from 'vue'
 import { notify } from "@kyvg/vue3-notification";
+import { useStore } from './store';
+import router from './router/index.ts'
+import Loading from './components/Loading.vue'
 
-const error = ref<string | null>(null)
+const { dispatch, state } = useStore();
 
-onErrorCaptured(() => {
-    error.value = 'Oh-yo-yo!!! Something went wrong...'
+onMounted(() => {
+    dispatch('checkAuth')
 })
 
 router.beforeEach((to, from, next) => {
@@ -41,21 +43,8 @@ router.beforeEach((to, from, next) => {
 <template>
     <notifications/>
 
-    <div v-if="error" class="flex h-screen w-full items-center justify-center">
-        <span class="text-center text-2xl font-bold text-opposite">
-            {{ error }}
-        </span>
-    </div>
-
-    <Suspense>
-        <template #default>
-            <router-view></router-view>
-        </template>
-        <template #fallback>
-            <h1>Loading...</h1>
-        </template>
-    </Suspense>
+    <Loading v-if="state.auth.isLoading" />
+    <template v-else>
+        <router-view></router-view>
+    </template>
 </template>
-
-<style scoped lang="sass">
-</style>

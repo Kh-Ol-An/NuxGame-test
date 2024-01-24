@@ -4,6 +4,7 @@ import useVuelidate from '@vuelidate/core';
 import { helpers } from '@vuelidate/validators';
 import { useStore } from '../store';
 import Input from '../components/Input.vue'
+import Card from '../components/Card.vue'
 
 const { dispatch } = useStore();
 
@@ -44,8 +45,8 @@ const handleLogin = () => {
 
 <template>
     <div class="root">
-        <div class="container">
-            <h1 class="title">Log In</h1>
+        <Card>
+            <template v-slot:header>Log In</template>
 
             <form class="body" @submit.prevent="handleLogin">
                 <span class="label">Please log in</span>
@@ -73,7 +74,7 @@ const handleLogin = () => {
                     Log In
                 </button>
             </form>
-        </div>
+        </Card>
     </div>
 </template>
 
@@ -87,23 +88,6 @@ const handleLogin = () => {
     display: flex
     align-items: center
     justify-content: center
-
-.container
-    width: 448px
-    border-radius: $primary-radius
-    background-color: $accept-color
-    overflow: hidden
-
-.title
-    padding: 14px
-    color: $special-color
-    font-size: $primary-font-size
-    font-style: normal
-    font-weight: $normal-weight
-    line-height: $primary-line-height
-    letter-spacing: $primary-letter-spacing
-    background-color: $secondary-color
-    text-align: center
 
 .body
     padding: 14px 24px 30px

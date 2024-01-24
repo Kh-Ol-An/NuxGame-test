@@ -19,7 +19,7 @@ interface Company {
 
 export interface User {
     id: number;
-    user: string;
+    name: string;
     username: string;
     email: string;
     address: Address;
