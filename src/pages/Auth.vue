@@ -95,12 +95,7 @@ const handleLogin = () => {
     flex-direction: column
 
 .label
-    color: $special-color
-    font-size: $secondary-font-size
-    font-style: normal
-    font-weight: $normal-weight
-    line-height: $primary-line-height
-    letter-spacing: $secondary-letter-spacing
+    @include label
 
 .username
     margin-top: 14px

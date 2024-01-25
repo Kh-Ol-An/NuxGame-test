@@ -49,7 +49,7 @@ export default {
             localStorage.removeItem('token');
             router.push('/auth');
         },
-        async checkAuth({ commit }) {
+        async checkAuth({ commit, dispatch }) {
             commit('setLoading', true);
             await sleep(1);
             try {
@@ -58,6 +58,7 @@ export default {
                 const response = await AuthService.login();
                 const user = response.data.find((user: User) => user.id === Number(token));
                 if (user) {
+                    dispatch('downloadTodos');
                     commit('setUser', user);
                     await router.push('/');
                 } else {

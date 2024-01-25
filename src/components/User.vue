@@ -16,32 +16,32 @@ const company = state.auth.user.company;
             <div class="body">
                 <div class="field">
                     <span class="label">Identifier:</span>
-                    <span class="value">{{ user.id }}</span>
+                    <span>{{ user.id }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Full name:</span>
-                    <span class="value">{{ user.name }}</span>
+                    <span>{{ user.name }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Nick:</span>
-                    <span class="value">{{ user.username }}</span>
+                    <span>{{ user.username }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">E-mail:</span>
-                    <span class="value">{{ user.email }}</span>
+                    <span>{{ user.email }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Phone:</span>
-                    <span class="value">{{ user.phone }}</span>
+                    <span>{{ user.phone }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Website:</span>
-                    <span class="value">{{ user.website }}</span>
+                    <span>{{ user.website }}</span>
                 </div>
             </div>
         </Card>
@@ -52,32 +52,32 @@ const company = state.auth.user.company;
             <div class="body">
                 <div class="field">
                     <span class="label">Street:</span>
-                    <span class="value">{{ address.street }}</span>
+                    <span>{{ address.street }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Suite:</span>
-                    <span class="value">{{ address.suite }}</span>
+                    <span>{{ address.suite }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">City:</span>
-                    <span class="value">{{ address.city }}</span>
+                    <span>{{ address.city }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Zipcode:</span>
-                    <span class="value">{{ address.zipcode }}</span>
+                    <span>{{ address.zipcode }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Geo latitude:</span>
-                    <span class="value">{{ address.geo.lat }}</span>
+                    <span>{{ address.geo.lat }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Geo longitude:</span>
-                    <span class="value">{{ address.geo.lng }}</span>
+                    <span>{{ address.geo.lng }}</span>
                 </div>
             </div>
         </Card>
@@ -88,17 +88,17 @@ const company = state.auth.user.company;
             <div class="body">
                 <div class="field">
                     <span class="label">Company Name:</span>
-                    <span class="value">{{ company.name }}</span>
+                    <span>{{ company.name }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Catchphrase:</span>
-                    <span class="value">{{ company.catchPhrase }}</span>
+                    <span>{{ company.catchPhrase }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Business Aspects:</span>
-                    <span class="value">{{ company.bs }}</span>
+                    <span>{{ company.bs }}</span>
                 </div>
             </div>
         </Card>
@@ -113,30 +113,26 @@ const company = state.auth.user.company;
 
 .root
     display: grid
-    grid-template-columns: repeat(3, 1fr)
     gap: 10px
+
+    @media (min-width: 768px)
+        grid-template-columns: repeat(2, 1fr)
+
+    @media (min-width: 1366px)
+        grid-template-columns: repeat(3, 1fr)
 
 .body
-    padding: 20px
-    display: flex
-    align-items: center
-    flex-direction: column
-    gap: 10px
+    @include card-body
 
 .field
-    display: flex
-    align-items: center
-    gap: 6px
+    @include card-field
 
 .label
     @include label
 
-.value
-    display: flex
-    align-items: center
-    gap: 6px
-
 .logout
     @include action
-    grid-column: 2/3
+
+    @media (min-width: 1366px)
+        grid-column: 2/3
 </style>

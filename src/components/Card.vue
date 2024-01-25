@@ -12,10 +12,14 @@
 @import '../styles/setup/variables.sass'
 
 .card
-    width: 448px
+    width: 100%
+    height: 100%
     border-radius: $primary-radius
     background-color: $accept-color
     overflow: hidden
+
+    @media (min-width: 1440px)
+        width: 448px
 
 .header
     padding: 14px
