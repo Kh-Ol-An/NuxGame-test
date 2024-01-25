@@ -18,12 +18,13 @@ export default {
         },
     },
     actions: {
-        async login({ commit }, { username, phone }) {
+        async login({ commit, dispatch }, { username, phone }) {
             commit('setLoading', true);
             try {
                 const response = await AuthService.login();
                 const user = response.data.find((user: User) => user.username === username && user.phone === phone);
                 if (user) {
+                    dispatch('downloadTodos');
                     commit('setUser', user);
                     localStorage.setItem('token', user.id);
                     await router.push('/');

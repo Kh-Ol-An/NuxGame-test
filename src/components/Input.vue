@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { defineProps, defineEmits } from 'vue';
+
 const props = defineProps({
     classes: {
         type: String,
@@ -42,7 +44,7 @@ const input = (event) => emit('update:value', event.target.value);
         />
 
         <ul class="errors">
-            <li class="error" v-for="error of errors" :key="error.$uid">
+            <li class="error" v-for="error in errors" :key="error.$uid">
                 {{ error.$message }}
             </li>
         </ul>

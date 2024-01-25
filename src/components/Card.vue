@@ -13,7 +13,6 @@
 
 .card
     width: 100%
-    height: 100%
     border-radius: $primary-radius
     background-color: $accept-color
     overflow: hidden
