@@ -44,7 +44,6 @@ router.beforeEach((to, from, next) => {
     <notifications/>
 
     <Loading v-if="state.auth.isLoading"/>
-    <template v-else>
-        <router-view></router-view>
-    </template>
+
+    <router-view></router-view>
 </template>

@@ -3,8 +3,9 @@ import { computed, ref } from 'vue';
 import useVuelidate from '@vuelidate/core';
 import { helpers } from '@vuelidate/validators';
 import { useStore } from '../store';
-import Input from '../components/Input.vue';
 import Card from '../components/Card.vue';
+import Input from '../components/Input.vue';
+import Button from '../components/Button.vue';
 
 const { dispatch } = useStore();
 
@@ -66,13 +67,13 @@ const handleLogin = () => {
                     placeholder="Phone Number"
                     :errors="v.phone.$errors"
                 />
-                <button
-                    :class="['login', disabledLogin && 'disabled-login']"
+                <Button
+                    class="login"
                     type="submit"
                     :disabled="disabledLogin"
                 >
                     Log In
-                </button>
+                </Button>
             </form>
         </Card>
     </div>
@@ -104,9 +105,5 @@ const handleLogin = () => {
     margin-top: 4px
 
 .login
-    @include action
     margin-top: 9px
-
-.disabled-login
-    opacity: 0.5
 </style>

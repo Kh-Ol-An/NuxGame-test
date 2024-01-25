@@ -82,12 +82,4 @@ export default {
             }
         },
     },
-    getters: {
-        getUser(state: AuthState) {
-            return state.user;
-        },
-        getLoading(state: AuthState) {
-            return state.isLoading;
-        },
-    },
 };

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue';
 
-const props = defineProps({
+defineProps({
     classes: {
         type: String,
         default: '',
@@ -22,6 +22,10 @@ const props = defineProps({
         type: String,
         default: '',
     },
+    withoutError: {
+        type: Boolean,
+        default: false,
+    },
     errors: {
         type: Array,
         required: false,
@@ -37,13 +41,15 @@ const input = (event) => emit('update:value', event.target.value);
         <input
             class="input"
             :id="id"
+            :name="id"
             type="text"
             :placeholder="placeholder"
             :value="value"
+            :autocomplete="id"
             @input="input"
         />
 
-        <ul class="errors">
+        <ul class="errors" v-if="!withoutError">
             <li class="error" v-for="error in errors" :key="error.$uid">
                 {{ error.$message }}
             </li>

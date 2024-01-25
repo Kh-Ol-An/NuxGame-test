@@ -1,16 +1,13 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue';
 import { useStore } from '../store';
-import Todo from '../components/Todo.vue';
 import User from '../components/User.vue';
+import CreateTodo from '../components/CreateTodo.vue';
 import DropDown from '../components/DropDown.vue';
+import Input from '../components/Input.vue';
+import Todo from '../components/Todo.vue';
 
-interface StatusOption {
-    value: string;
-    label: string;
-}
-
-const { state } = useStore();
+const { state, dispatch } = useStore();
 
 // Filter bu status
 const statusOptions = [
@@ -19,21 +16,14 @@ const statusOptions = [
     { value: 'uncompleted', label: 'Uncompleted' },
     { value: 'favorites', label: 'Favorites' },
 ];
+const selectedStatusOption = ref<string | null>(null);
 
-const selectedStatusOption = ref<StatusOption | null>(null);
-
-const sendStatusFilterRequest = () => {
-    console.log('sendStatusFilterRequest:', selectedStatusOption.value);
-};
-
-watch(selectedStatusOption, () => {
-    sendStatusFilterRequest();
-});
+const statusFilterParams = ref<string>('');
 
 // Filter bu user id
 const userIdOptions = computed(() => {
     const initialUserIdOptions = [{ value: 'all-users', label: 'All Users' }];
-    state.todos.todos.map((todo) => {
+    state.todos?.todos?.map((todo) => {
         if (!initialUserIdOptions.some((option) => option.value === todo.userId)) {
             initialUserIdOptions.push({
                 value: todo.userId,
@@ -45,20 +35,70 @@ const userIdOptions = computed(() => {
     return initialUserIdOptions;
 });
 
-const selectedUserIdOption = ref<StatusOption | null>(null);
+const selectedUserIdOption = ref<string | null>(null);
 
-const sendUserIdFilterRequest = () => {
-    console.log('Новий запит з опціями:', selectedUserIdOption.value);
+const userIdFilterParams = ref<string>('');
+
+//filtering
+const filtering = () => {
+    let params = '?';
+    if (statusFilterParams.value.length > 0) {
+        params += (statusFilterParams.value + '&');
+    }
+    if (userIdFilterParams.value.length > 0) {
+        params += (userIdFilterParams.value + '&');
+    }
+
+    dispatch('filterTodos', params.replace(/&+$/, ''));
 };
 
-watch(selectedUserIdOption, () => {
-    sendUserIdFilterRequest();
+watch([selectedStatusOption, selectedUserIdOption], () => {
+    if (selectedStatusOption.value === 'all') {
+        statusFilterParams.value = '';
+    }
+
+    if (selectedStatusOption.value === 'completed') {
+        statusFilterParams.value = `completed=${true}`;
+    }
+
+    if (selectedStatusOption.value === 'uncompleted') {
+        statusFilterParams.value = `completed=${false}`;
+    }
+
+//    if (selectedStatusOption.value?.value === 'favorites') {
+//        statusFilterParams.value = `favorites=${true}`;
+//    }
+
+    userIdFilterParams.value = `userId=${selectedUserIdOption.value}`;
+    if (selectedUserIdOption.value === 'all-users' || !selectedUserIdOption.value) {
+        userIdFilterParams.value = '';
+    }
+
+    filtering();
+});
+
+// Search
+const search = ref<string>('');
+
+const filteredTodos = computed(() => {
+    let todos = state.todos?.todos;
+    if (state.todos?.filteredTodos.length > 0) {
+        todos = state.todos?.filteredTodos;
+    }
+
+    if (search.value.length > 0) {
+        todos = todos?.filter((todo) => todo.title.toLowerCase().includes(search.value.toLowerCase()));
+    }
+
+    return todos || [];
 });
 </script>
 
 <template>
     <div class="todos-root">
         <User/>
+
+        <CreateTodo />
 
         <div class="filters">
             <DropDown
@@ -72,10 +112,23 @@ watch(selectedUserIdOption, () => {
                 v-model:value="selectedUserIdOption"
                 label="Filter by user id:"
             />
+
+            <!-- I set "new-password" for the id because: -->
+            <!-- https://adamsilver.io/blog/stopping-chrome-from-ignoring-autocomplete-off/ -->
+            <div class="search">
+                <span class="label">Search:</span>
+                <Input
+                    id="new-password"
+                    v-model:value="search"
+                    type="text"
+                    placeholder="Searching..."
+                    withoutError
+                />
+            </div>
         </div>
 
         <ul class="todos">
-            <li v-for="todo in state.todos.todos" :key="todo.id">
+            <li v-for="todo in filteredTodos" :key="todo.id">
                 <Todo
                     :userId="todo.userId"
                     :id="todo.id"
@@ -107,6 +160,15 @@ watch(selectedUserIdOption, () => {
     align-items: center
     justify-content: space-around
     gap: 20px
+
+.search
+    display: flex
+    align-items: center
+    gap: 8px
+
+.label
+    @include label
+    color: $white-color
 
 .todos
     display: grid

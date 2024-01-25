@@ -1,11 +1,13 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 import { useStore } from '../store';
 import Card from '../components/Card.vue';
+import Button from '../components/Button.vue';
 
 const { state, dispatch } = useStore();
-const user = state.auth.user;
-const address = state.auth.user.address;
-const company = state.auth.user.company;
+const user = computed(() => state.auth?.user);
+const address = computed(() => state.auth?.user?.address);
+const company = computed(() => state.auth?.user?.company);
 </script>
 
 <template>
@@ -16,32 +18,32 @@ const company = state.auth.user.company;
             <div class="body">
                 <div class="field">
                     <span class="label">Identifier:</span>
-                    <span>{{ user.id }}</span>
+                    <span>{{ user?.id }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Full name:</span>
-                    <span>{{ user.name }}</span>
+                    <span>{{ user?.name }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Nick:</span>
-                    <span>{{ user.username }}</span>
+                    <span>{{ user?.username }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">E-mail:</span>
-                    <span>{{ user.email }}</span>
+                    <span>{{ user?.email }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Phone:</span>
-                    <span>{{ user.phone }}</span>
+                    <span>{{ user?.phone }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Website:</span>
-                    <span>{{ user.website }}</span>
+                    <span>{{ user?.website }}</span>
                 </div>
             </div>
         </Card>
@@ -52,32 +54,32 @@ const company = state.auth.user.company;
             <div class="body">
                 <div class="field">
                     <span class="label">Street:</span>
-                    <span>{{ address.street }}</span>
+                    <span>{{ address?.street }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Suite:</span>
-                    <span>{{ address.suite }}</span>
+                    <span>{{ address?.suite }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">City:</span>
-                    <span>{{ address.city }}</span>
+                    <span>{{ address?.city }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Zipcode:</span>
-                    <span>{{ address.zipcode }}</span>
+                    <span>{{ address?.zipcode }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Geo latitude:</span>
-                    <span>{{ address.geo.lat }}</span>
+                    <span>{{ address?.geo?.lat }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Geo longitude:</span>
-                    <span>{{ address.geo.lng }}</span>
+                    <span>{{ address?.geo?.lng }}</span>
                 </div>
             </div>
         </Card>
@@ -88,22 +90,22 @@ const company = state.auth.user.company;
             <div class="body">
                 <div class="field">
                     <span class="label">Company Name:</span>
-                    <span>{{ company.name }}</span>
+                    <span>{{ company?.name }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Catchphrase:</span>
-                    <span>{{ company.catchPhrase }}</span>
+                    <span>{{ company?.catchPhrase }}</span>
                 </div>
 
                 <div class="field">
                     <span class="label">Business Aspects:</span>
-                    <span>{{ company.bs }}</span>
+                    <span>{{ company?.bs }}</span>
                 </div>
             </div>
         </Card>
 
-        <button class="logout" type="button" @click="dispatch('logout')">logout</button>
+        <Button class="logout" type="button" @click="dispatch('logout')">logout</Button>
     </div>
 </template>
 
@@ -131,8 +133,6 @@ const company = state.auth.user.company;
     @include label
 
 .logout
-    @include action
-
     @media (min-width: 1366px)
         grid-column: 2/3
 </style>

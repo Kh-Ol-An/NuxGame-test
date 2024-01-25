@@ -42,6 +42,7 @@ export interface AuthState {
 
 export interface TodosState {
     todos: Todo[];
+    filteredTodos: Todo[];
 }
 
 export interface RootState {

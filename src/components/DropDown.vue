@@ -8,7 +8,7 @@ interface Option {
 
 interface Props {
     options: Option[];
-    value: Option | null;
+    value: string | number | null;
     label: string;
 }
 
@@ -24,7 +24,7 @@ const dropDown = ref<HTMLDivElement | null>(null);
 
 const toggleOption = (option) => {
     selectedOption.value = option;
-    emit('update:value', option);
+    emit('update:value', option.value);
     showDropDown.value = false;
 };
 
@@ -76,7 +76,6 @@ onBeforeUnmount(() => {
 .label
     @include label
     color: $white-color
-    line-height: 32px
 
 .dropdown-wrapper
     position: relative
@@ -84,15 +83,21 @@ onBeforeUnmount(() => {
     cursor: pointer
 
 .dropdown-selected-option
-    padding: 8px
+    padding: 10px
     background-color: $white-color
     border-radius: $primary-radius
-    margin-bottom: 4px
+    color: $special-two-color
+    font-size: $primary-font-size
+    font-style: normal
+    font-weight: $normal-weight
+    line-height: $primary-line-height
+    letter-spacing: $primary-letter-spacing
 
 .options-wrapper
     position: absolute
     top: 100%
     left: 0
+    margin-top: 4px
     width: 100%
     z-index: 1
     overflow: hidden
