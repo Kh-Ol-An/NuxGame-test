@@ -16,6 +16,7 @@ const statusOptions = [
     { value: 'uncompleted', label: 'Uncompleted' },
     { value: 'favorites', label: 'Favorites' },
 ];
+
 const selectedStatusOption = ref<string | null>(null);
 
 const statusFilterParams = ref<string>('');
@@ -38,6 +39,12 @@ const userIdOptions = computed(() => {
 const selectedUserIdOption = ref<string | null>(null);
 
 const userIdFilterParams = ref<string>('');
+
+// Search
+const search = ref<string>('');
+
+// Favorites
+const storedFavorites = ref<string[] | null>(JSON.parse(localStorage.getItem('favorites')));
 
 //filtering
 const filtering = () => {
@@ -73,11 +80,6 @@ watch([selectedStatusOption, selectedUserIdOption], () => {
     filtering();
 });
 
-// Search
-const search = ref<string>('');
-
-const storedFavorites = ref<string[] | null>(JSON.parse(localStorage.getItem('favorites')));
-
 const filteredTodos = computed(() => {
     let todos = state.todos?.todos;
     if (state.todos?.filteredTodos.length > 0) {
@@ -100,7 +102,7 @@ const filteredTodos = computed(() => {
     <div class="todos-root">
         <User/>
 
-        <CreateTodo />
+        <CreateTodo/>
 
         <div class="filters">
             <DropDown

@@ -18,7 +18,7 @@ const validateUsername = (value) => {
 };
 
 const validatePhone = (value) => {
-    const regex = /^[0-9-+!@#$%^&*(),.?":{}|<>]+$/;
+    const regex = /^[0-9-x.() ]+$/;
     return regex.test(value);
 };
 
@@ -31,7 +31,7 @@ const rules = computed(() => ({
     }
 }));
 
-const v = useVuelidate(rules, { username, phone });
+const v: ReturnType<typeof useVuelidate> = useVuelidate(rules, { username, phone });
 
 const disabledLogin = computed(
     () => username.value.length === 0 || phone.value.length === 0 || v.value.$error

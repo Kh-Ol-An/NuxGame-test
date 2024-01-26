@@ -2,7 +2,6 @@ import { notify } from '@kyvg/vue3-notification';
 import router from '../../router/index.ts';
 import AuthService from '../../services/AuthService.ts';
 import { AuthState, User } from '../types';
-import sleep from '../../utils/sleep.ts';
 
 export default {
     state: {
@@ -24,7 +23,7 @@ export default {
                 const response = await AuthService.login();
                 const user = response.data.find((user: User) => user.username === username && user.phone === phone);
                 if (user) {
-                    dispatch('downloadTodos');
+                    await dispatch('downloadTodos');
                     commit('setUser', user);
                     localStorage.setItem('token', user.id);
                     await router.push('/');
@@ -48,18 +47,18 @@ export default {
         logout({ commit }) {
             commit('setUser', null);
             localStorage.removeItem('token');
+            localStorage.removeItem('favorites');
             router.push('/auth');
         },
         async checkAuth({ commit, dispatch }) {
             commit('setLoading', true);
-            await sleep(1);
             try {
                 const token = localStorage.getItem('token');
                 if (!token) return;
                 const response = await AuthService.login();
                 const user = response.data.find((user: User) => user.id === Number(token));
                 if (user) {
-                    dispatch('downloadTodos');
+                    await dispatch('downloadTodos');
                     commit('setUser', user);
                     await router.push('/');
                 } else {

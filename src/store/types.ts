@@ -28,16 +28,16 @@ export interface User {
     company: Company;
 }
 
+export interface AuthState {
+    user: User;
+    isLoading: boolean;
+}
+
 export interface Todo {
     userId: number;
     id: string | number;
     title: string;
     completed: boolean;
-}
-
-export interface AuthState {
-    user: User;
-    isLoading: boolean;
 }
 
 export interface TodosState {
