@@ -49,11 +49,11 @@ const filtering = () => {
         params += (userIdFilterParams.value + '&');
     }
 
-    dispatch('filterTodos', params.replace(/&+$/, ''));
+    dispatch('filterTodos', params.replace(/[\?&]+$/, ''));
 };
 
 watch([selectedStatusOption, selectedUserIdOption], () => {
-    if (selectedStatusOption.value === 'all') {
+    if (selectedStatusOption.value === 'all' || selectedStatusOption.value === 'favorites') {
         statusFilterParams.value = '';
     }
 
@@ -64,10 +64,6 @@ watch([selectedStatusOption, selectedUserIdOption], () => {
     if (selectedStatusOption.value === 'uncompleted') {
         statusFilterParams.value = `completed=${false}`;
     }
-
-//    if (selectedStatusOption.value?.value === 'favorites') {
-//        statusFilterParams.value = `favorites=${true}`;
-//    }
 
     userIdFilterParams.value = `userId=${selectedUserIdOption.value}`;
     if (selectedUserIdOption.value === 'all-users' || !selectedUserIdOption.value) {
@@ -80,6 +76,8 @@ watch([selectedStatusOption, selectedUserIdOption], () => {
 // Search
 const search = ref<string>('');
 
+const storedFavorites = ref<string[] | null>(JSON.parse(localStorage.getItem('favorites')));
+
 const filteredTodos = computed(() => {
     let todos = state.todos?.todos;
     if (state.todos?.filteredTodos.length > 0) {
@@ -88,6 +86,10 @@ const filteredTodos = computed(() => {
 
     if (search.value.length > 0) {
         todos = todos?.filter((todo) => todo.title.toLowerCase().includes(search.value.toLowerCase()));
+    }
+
+    if (selectedStatusOption.value === 'favorites') {
+        todos = todos?.filter((todo) => storedFavorites.value?.includes(todo.id));
     }
 
     return todos || [];
@@ -134,6 +136,7 @@ const filteredTodos = computed(() => {
                     :id="todo.id"
                     :title="todo.title"
                     :completed="todo.completed"
+                    v-model:favorites="storedFavorites"
                 />
             </li>
         </ul>

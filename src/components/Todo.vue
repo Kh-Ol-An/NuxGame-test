@@ -1,25 +1,38 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
+import { computed, defineProps, defineEmits } from 'vue';
 import Card from '../components/Card.vue';
+import Button from './Button.vue';
 
-defineProps({
-    userId: {
-        type: Number,
-        required: true,
-    },
-    id: {
-        type: Number,
-        required: true,
-    },
-    title: {
-        type: String,
-        required: true,
-    },
-    completed: {
-        type: Boolean,
-        required: true,
-    },
-});
+interface Props {
+    userId: number;
+    id: number;
+    title: string;
+    completed: boolean;
+    favorites?: number[] | null;
+}
+
+const props = defineProps<Props>();
+
+const emit = defineEmits(['update:favorites']);
+
+const inactive = computed(() => !props.favorites?.includes(props.id));
+
+const toggleFavorite = () => {
+    const favorites = props.favorites;
+    if (favorites === null) {
+        localStorage.setItem('favorites', JSON.stringify([props.id]));
+        emit('update:favorites', [props.id]);
+    } else {
+        if (favorites.includes(props.id)) {
+            const index = favorites.indexOf(props.id);
+            favorites.splice(index, 1);
+        } else {
+            favorites.push(props.id);
+        }
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        emit('update:favorites', favorites);
+    }
+};
 </script>
 
 <template>
@@ -42,6 +55,14 @@ defineProps({
                     {{ completed ? 'Completed' : 'Uncompleted' }}
                 </span>
             </div>
+
+            <Button
+                type="button"
+                :inactive="inactive"
+                @click="toggleFavorite"
+            >
+                Favorite
+            </Button>
         </div>
     </Card>
 </template>

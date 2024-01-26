@@ -6,6 +6,10 @@ defineProps({
         type: String,
         required: false,
     },
+    inactive: {
+        type: Boolean,
+        default: false,
+    },
     disabled: {
         type: Boolean,
         default: false,
@@ -15,18 +19,19 @@ defineProps({
         required: true,
     },
 });
+
 const emit = defineEmits(['click']);
 const click = () => emit('click');
 </script>
 
 <template>
     <button
-        :class="['action', classes, disabled && 'disabled']"
+        :class="['action', classes, inactive && 'inactive', disabled && 'disabled']"
         :type="type"
         :disabled="disabled"
         @click="click"
     >
-        <slot></slot>
+        <slot>Action</slot>
     </button>
 </template>
 
@@ -36,7 +41,7 @@ const click = () => emit('click');
 .action
     padding: 10px 30px
     border-radius: $primary-radius
-    border: none
+    border: 2px solid $action-color
     background-color: $action-color
     color: $white-color
     font-size: $primary-font-size
@@ -45,6 +50,10 @@ const click = () => emit('click');
     line-height: $primary-line-height
     letter-spacing: $primary-letter-spacing
     cursor: pointer
+
+.inactive
+    background-color: transparent
+    color: $action-color
 
 .disabled
     opacity: 0.5
